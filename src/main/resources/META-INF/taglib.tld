@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+	version="2.0">
+	<tlib-version>2.1</tlib-version>
+	<short-name>elasticsearch</short-name>
+	<uri>http://uiowa.edu/elasticsearch</uri>
+
+	<tag>
+		<name>index</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticIndex</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>propertyName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>filter</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticFilter</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>fieldName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>termString</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>delimiterPattern</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+	</tag>
+
+	<tag>
+		<name>aggregator</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregator</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>displayName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>fieldName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+	</tag>
+
+	<tag>
+		<name>search</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticSearch</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>queryString</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+	</tag>
+
+	<tag>
+		<name>searchIterator</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticIterator</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+        <attribute>
+            <name>startCriteria</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+		<attribute>
+			<name>thresholdCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>rankOffset</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>hit</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticHit</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>label</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>document</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticDocument</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
+		<name>indexNameIterator</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticNameIterator</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+        <attribute>
+            <name>startCriteria</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+	</tag>
+	
+	<tag>
+		<name>indexName</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticIndexName</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
+		<name>aggregationIterator</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationIterator</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+        <attribute>
+            <name>startCriteria</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+		<attribute>
+			<name>thresholdCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>rankOffset</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>aggregation</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregation</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
+		<name>aggregationName</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationName</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
+		<name>aggregationTermIterator</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTermIterator</tag-class>
+		<body-content>JSP</body-content>
+
+		<attribute>
+			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+        <attribute>
+            <name>startCriteria</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+
+		<attribute>
+			<name>thresholdCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>rankOffset</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	
+	<tag>
+		<name>aggregationTerm</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTerm</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
+		<name>aggregationTermCount</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTermCount</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+</taglib>
+	
