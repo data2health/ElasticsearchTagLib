@@ -75,7 +75,7 @@ public class ElasticIterator extends BodyTagSupport {
 			return SKIP_BODY;
 		}
 
-		if (hitFence < theHits.getTotalHits().value - 1) {
+		if (hitFence < theHits.getTotalHits().value) {
 			theHit = theHits.getHits()[hitFence++];
 			thresholdFence = theHit.getScore();
 

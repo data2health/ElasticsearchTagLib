@@ -131,6 +131,12 @@
 	</tag>
 	
 	<tag>
+		<name>count</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticCount</tag-class>
+		<body-content>JSP</body-content>
+	</tag>
+	
+	<tag>
 		<name>indexNameIterator</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticNameIterator</tag-class>
 		<body-content>JSP</body-content>

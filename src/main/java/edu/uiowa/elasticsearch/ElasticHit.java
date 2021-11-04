@@ -28,10 +28,14 @@ public class ElasticHit extends BodyTagSupport {
 		}
 
 		try {
-			if (label.equals("score"))
+			if (label.equals("score")) {
+				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getScore());
 				pageContext.getOut().print(theIterator.theHit.getScore());
-			else {
-				log.debug("lucene hit: " + label + ": " + theIterator.theDocument.optString(label));
+			} else if (label.equals("_index")) {
+				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getIndex());
+				pageContext.getOut().print(theIterator.theHit.getIndex());
+			} else {
+				log.debug("elastic hit: " + label + ": " + theIterator.theDocument.optString(label));
 				pageContext.getOut().print(theIterator.theDocument.optString(label));
 			}
 		} catch (CorruptIndexException e) {
