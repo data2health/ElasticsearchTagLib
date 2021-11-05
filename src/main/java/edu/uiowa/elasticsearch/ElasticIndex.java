@@ -51,7 +51,15 @@ public class ElasticIndex extends BodyTagSupport {
 	}
 
 	public int doEndTag() throws JspException {
+		clearServiceState();
 		return super.doEndTag();
+	}
+	
+	private void clearServiceState() {
+		client = null;
+		indices = new Vector<String>();
+		filters = new Hashtable<String, Filter>();
+		aggregations = new Hashtable<String, Aggregator>();
 	}
 
 	public String getPropertyName() {
