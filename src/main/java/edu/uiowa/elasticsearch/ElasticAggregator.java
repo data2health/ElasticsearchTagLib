@@ -17,6 +17,7 @@ public class ElasticAggregator extends BodyTagSupport {
 	ElasticIndex theIndex = null;
 	String displayName = null;
 	String fieldName = null;
+	int size = 100;
 	
 	public int doStartTag() throws JspException {
 		theIndex = (ElasticIndex) findAncestorWithClass(this, ElasticIndex.class);
@@ -24,7 +25,7 @@ public class ElasticAggregator extends BodyTagSupport {
 		Hashtable<String, Aggregator> aggregations = theIndex.aggregations;
 		Aggregator current = aggregations.get(displayName);
 		if (current == null) {
-			current = new Aggregator(displayName, fieldName);
+			current = new Aggregator(displayName, fieldName, size);
 			aggregations.put(displayName, current);
 		}
 		return SKIP_BODY;
@@ -48,6 +49,14 @@ public class ElasticAggregator extends BodyTagSupport {
 
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
 	}
 
 }

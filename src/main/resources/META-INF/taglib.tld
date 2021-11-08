@@ -61,6 +61,12 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 
+		<attribute>
+			<name>size</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
 	</tag>
 
 	<tag>
@@ -127,13 +133,13 @@
 	<tag>
 		<name>document</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticDocument</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	
 	<tag>
 		<name>count</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticCount</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	
 	<tag>
@@ -157,7 +163,7 @@
 	<tag>
 		<name>indexName</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticIndexName</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	
 	<tag>
@@ -197,9 +203,15 @@
 	</tag>
 	
 	<tag>
+		<name>aggregationCount</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationCount</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	
+	<tag>
 		<name>aggregationName</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationName</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	
 	<tag>
@@ -235,13 +247,25 @@
 	<tag>
 		<name>aggregationTerm</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTerm</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
 	</tag>
 	
 	<tag>
 		<name>aggregationTermCount</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTermCount</tag-class>
-		<body-content>JSP</body-content>
+		<body-content>empty</body-content>
+	</tag>
+	
+	<tag>
+		<name>aggregationTermStatus</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticAggregationTermStatus</tag-class>
+		<body-content>empty</body-content>
+
+		<attribute>
+			<name>request</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	
 </taglib>

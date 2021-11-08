@@ -9,6 +9,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.index.CorruptIndexException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @SuppressWarnings("serial")
 
@@ -16,7 +18,7 @@ public class ElasticHit extends BodyTagSupport {
 	ElasticSearch theSearch = null;
 	ElasticIterator theIterator = null;
 	String label = null;
-	String value = null;
+	String delimiter = "/";
 	private static final Log log = LogFactory.getLog(ElasticHit.class);
 
 	public int doStartTag() throws JspTagException {
@@ -35,8 +37,33 @@ public class ElasticHit extends BodyTagSupport {
 				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getIndex());
 				pageContext.getOut().print(theIterator.theHit.getIndex());
 			} else {
-				log.debug("elastic hit: " + label + ": " + theIterator.theDocument.optString(label));
-				pageContext.getOut().print(theIterator.theDocument.optString(label));
+				log.debug("delimiter: " + delimiter);
+				if (!label.contains(delimiter)) {
+					log.debug("elastic hit: " + label + ": " + theIterator.theDocument.optString(label));
+					pageContext.getOut().print(theIterator.theDocument.optString(label));
+				} else {
+					String[] nodes = label.split(delimiter);
+					log.debug("elasic hit path: " + stringToArray(nodes));
+					Object current = theIterator.theDocument.opt(nodes[0]);
+					for (int i = 0; i < nodes.length; i++) {
+						if (current == null || current == org.json.JSONObject.NULL) {
+							log.debug("elastic hit: " + nodes[i] + ": <missing>");
+							pageContext.getOut().print("");							
+						} else if (current instanceof JSONObject) {
+							JSONObject object = (JSONObject)current;
+							log.debug("elasic hit path element: " + nodes[i]);
+							current = object.opt(nodes[i+1]);
+						} else if (current instanceof JSONArray) {
+							JSONArray object = (JSONArray)current;
+							log.debug("elasic hit array path element: " + nodes[i]);
+							current = ((JSONArray) current).get(0);
+							i--;
+						} else {
+							log.debug("elastic hit: " + label + ": " + ((String)current));
+							pageContext.getOut().print(((String)current));
+						}
+					}
+				}
 			}
 		} catch (CorruptIndexException e) {
 			log.error("Corruption Exception", e);
@@ -45,6 +72,13 @@ public class ElasticHit extends BodyTagSupport {
 		}
 
 		return SKIP_BODY;
+	}
+	
+	String stringToArray(String[] array) {
+		StringBuffer result = new StringBuffer();
+		for (int i = 0; i < array.length; i++)
+			result.append((i == 0 ? "" : ", ")+array[i]);
+		return result.toString();
 	}
 
 	public int doEndTag() throws JspException {
@@ -59,12 +93,12 @@ public class ElasticHit extends BodyTagSupport {
 		this.label = label;
 	}
 
-	public String getValue() {
-		return value;
+	public String getDelimiter() {
+		return delimiter;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setDelimiter(String delimiter) {
+		this.delimiter = delimiter;
 	}
 
 }
