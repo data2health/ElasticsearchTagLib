@@ -70,6 +70,25 @@
 	</tag>
 
 	<tag>
+		<name>boost</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticBoost</tag-class>
+		<body-content>empty</body-content>
+
+		<attribute>
+			<name>fieldName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>boost</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+	</tag>
+
+	<tag>
 		<name>search</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticSearch</tag-class>
 		<body-content>JSP</body-content>

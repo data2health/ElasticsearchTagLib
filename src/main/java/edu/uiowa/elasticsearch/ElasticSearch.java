@@ -24,6 +24,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilde
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import edu.uiowa.elasticsearch.util.Aggregator;
+import edu.uiowa.elasticsearch.util.Boost;
 import edu.uiowa.elasticsearch.util.Filter;
 
 @SuppressWarnings("serial")
@@ -58,6 +59,9 @@ public class ElasticSearch extends BodyTagSupport {
 			org.elasticsearch.action.search.SearchRequest searchRequest = new org.elasticsearch.action.search.SearchRequest("cd2h-*"); 
 			
 			MultiMatchQueryBuilder matcher = new MultiMatchQueryBuilder(queryString, "*");
+			for (Boost boost : theIndex.boosts) {
+				matcher.field(boost.getFieldName(), boost.getBoost());
+			}
 			matcher.type(Type.CROSS_FIELDS);
 			matcher.operator(Operator.AND);
 

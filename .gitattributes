@@ -17,6 +17,7 @@ src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermCount.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermStatus.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregator.java -text
+src/main/java/edu/uiowa/elasticsearch/ElasticBoost.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticCount.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticDocument.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticFilter.java -text
@@ -27,6 +28,7 @@ src/main/java/edu/uiowa/elasticsearch/ElasticIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticNameIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticSearch.java -text
 src/main/java/edu/uiowa/elasticsearch/util/Aggregator.java -text
+src/main/java/edu/uiowa/elasticsearch/util/Boost.java -text
 src/main/java/edu/uiowa/elasticsearch/util/ClientFactory.java -text
 src/main/java/edu/uiowa/elasticsearch/util/Filter.java -text
 src/main/java/edu/uiowa/elasticsearch/util/LocalProperties.java -text
