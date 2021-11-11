@@ -54,7 +54,6 @@ public class ElasticHit extends BodyTagSupport {
 							log.debug("elasic hit path element: " + nodes[i]);
 							current = object.opt(nodes[i+1]);
 						} else if (current instanceof JSONArray) {
-							JSONArray object = (JSONArray)current;
 							log.debug("elasic hit array path element: " + nodes[i]);
 							current = ((JSONArray) current).get(0);
 							i--;
