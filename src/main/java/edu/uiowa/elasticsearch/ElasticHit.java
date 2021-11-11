@@ -36,6 +36,9 @@ public class ElasticHit extends BodyTagSupport {
 			} else if (label.equals("_index")) {
 				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getIndex());
 				pageContext.getOut().print(theIterator.theHit.getIndex());
+			} else if (label.equals("_id")) {
+				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getId());
+				pageContext.getOut().print(theIterator.theHit.getId().replaceAll("[.:/]+", "")); // in case the id contains problematic characters
 			} else {
 				log.debug("delimiter: " + delimiter);
 				if (!label.contains(delimiter)) {
@@ -55,7 +58,12 @@ public class ElasticHit extends BodyTagSupport {
 							current = object.opt(nodes[i+1]);
 						} else if (current instanceof JSONArray) {
 							log.debug("elasic hit array path element: " + nodes[i]);
-							current = ((JSONArray) current).get(0);
+							if (((JSONArray) current).length() == 0) {
+								log.debug("elastic hit: " + nodes[i] + ": <array empty>");
+								pageContext.getOut().print("");
+								current = null;
+							} else
+								current = ((JSONArray) current).get(0);
 							i--;
 						} else {
 							log.debug("elastic hit: " + label + ": " + ((String)current));
