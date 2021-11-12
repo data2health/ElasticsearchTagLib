@@ -31,14 +31,14 @@ public class ElasticHit extends BodyTagSupport {
 
 		try {
 			if (label.equals("score")) {
-				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getScore());
+				log.debug("elastic score hit: " + label + ": " + theIterator.theHit.getScore());
 				pageContext.getOut().print(theIterator.theHit.getScore());
 			} else if (label.equals("_index")) {
-				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getIndex());
+				log.debug("elastic index hit: " + label + ": " + theIterator.theHit.getIndex());
 				pageContext.getOut().print(theIterator.theHit.getIndex());
 			} else if (label.equals("_id")) {
-				log.debug("elastic hit: " + label + ": " + theIterator.theHit.getId());
-				pageContext.getOut().print(theIterator.theHit.getId().replaceAll("[.:/]+", "")); // in case the id contains problematic characters
+				log.debug("elastic id hit: " + label + ": " + theIterator.theHit.getId());
+				pageContext.getOut().print(theIterator.theHit.getId().replaceAll("[^a-zA-Z0-9_]+", "")); // in case the id contains problematic characters
 			} else {
 				log.debug("delimiter: " + delimiter);
 				if (!label.contains(delimiter)) {

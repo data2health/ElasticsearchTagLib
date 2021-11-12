@@ -16,6 +16,8 @@ public class ElasticDocument extends BodyTagSupport {
 	ElasticSearch theSearch = null;
 	ElasticIterator theIterator = null;
 	private static final Log log = LogFactory.getLog(ElasticDocument.class);
+	
+	boolean escape = false;
 
 	public int doStartTag() throws JspTagException {
 		theSearch = (ElasticSearch) findAncestorWithClass(this, ElasticSearch.class);
@@ -27,7 +29,10 @@ public class ElasticDocument extends BodyTagSupport {
 
 		try {
 			log.info("response document: " + theIterator.theDocument.toString(3));
-			pageContext.getOut().print(theIterator.theDocument.toString(3));
+			if (escape)
+				pageContext.getOut().print(theIterator.theDocument.toString(3).replaceAll("<", "&lt")); // presenting embedded tags can break things
+			else
+				pageContext.getOut().print(theIterator.theDocument.toString(3));
 		} catch (CorruptIndexException e) {
 			log.error("Corruption Exception", e);
 		} catch (IOException e) {
@@ -39,6 +44,14 @@ public class ElasticDocument extends BodyTagSupport {
 
 	public int doEndTag() throws JspException {
 		return super.doEndTag();
+	}
+
+	public boolean isEscape() {
+		return escape;
+	}
+
+	public void setEscape(boolean escape) {
+		this.escape = escape;
 	}
 
 }

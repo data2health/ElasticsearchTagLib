@@ -153,6 +153,12 @@
 		<name>document</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticDocument</tag-class>
 		<body-content>empty</body-content>
+
+		<attribute>
+			<name>escape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 	
 	<tag>
