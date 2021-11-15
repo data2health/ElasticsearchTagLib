@@ -17,6 +17,7 @@ import org.json.JSONObject;
 public class ElasticHit extends BodyTagSupport {
 	ElasticSearch theSearch = null;
 	ElasticIterator theIterator = null;
+	ElasticArrayIterator theArrayIterator = null;
 	String label = null;
 	String delimiter = "/";
 	private static final Log log = LogFactory.getLog(ElasticHit.class);
@@ -24,6 +25,7 @@ public class ElasticHit extends BodyTagSupport {
 	public int doStartTag() throws JspTagException {
 		theSearch = (ElasticSearch) findAncestorWithClass(this, ElasticSearch.class);
 		theIterator = (ElasticIterator) findAncestorWithClass(this, ElasticIterator.class);
+		theArrayIterator = (ElasticArrayIterator) findAncestorWithClass(this, ElasticArrayIterator.class);
 
 		if (theSearch == null) {
 			throw new JspTagException("Lucene Hit tag not nesting in Search instance");
@@ -42,8 +44,14 @@ public class ElasticHit extends BodyTagSupport {
 			} else {
 				log.debug("delimiter: " + delimiter);
 				if (!label.contains(delimiter)) {
-					log.debug("elastic hit: " + label + ": " + theIterator.theDocument.optString(label));
-					pageContext.getOut().print(theIterator.theDocument.optString(label));
+					if (label.equals("")) {
+						log.debug("elastic hit: " + label + ": " + theArrayIterator.current);
+						pageContext.getOut().print(theArrayIterator.current);
+					} else {
+						String display = (theArrayIterator == null ? theIterator.theDocument.optString(label) : ((JSONObject)(theArrayIterator.current)).optString(label));
+						log.debug("elastic hit: " + label + ": " + display);
+						pageContext.getOut().print(display);
+					}
 				} else {
 					String[] nodes = label.split(delimiter);
 					log.debug("elasic hit path: " + stringToArray(nodes));
@@ -81,7 +89,7 @@ public class ElasticHit extends BodyTagSupport {
 		return SKIP_BODY;
 	}
 	
-	String stringToArray(String[] array) {
+	public static String stringToArray(String[] array) {
 		StringBuffer result = new StringBuffer();
 		for (int i = 0; i < array.length; i++)
 			result.append((i == 0 ? "" : ", ")+array[i]);

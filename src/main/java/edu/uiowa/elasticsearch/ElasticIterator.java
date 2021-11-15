@@ -10,6 +10,7 @@ import java.io.StringReader;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.commons.logging.Log;
@@ -25,16 +26,18 @@ public class ElasticIterator extends BodyTagSupport {
 	ElasticSearch theSearch = null;
 	SearchHits theHits = null;
 	SearchHit theHit = null;
-	private int hitFence = 0;
+	public int hitFence = 0;
 	private int hitOffset = 0;
 	double thresholdFence = 0.0;
 	JSONObject theDocument = null;
 	String label = null;
+	String var = null;
 
 	int limitCriteria = Integer.MAX_VALUE;
 	int startCriteria = 1;
 	double thresholdCriteria = 0.0;
 	private static final Log log = LogFactory.getLog(ElasticIterator.class);
+    private int scope = PageContext.PAGE_SCOPE;
 
 	public int doStartTag() throws JspException {
 		log.trace("limit: " + limitCriteria);
@@ -63,6 +66,8 @@ public class ElasticIterator extends BodyTagSupport {
 				return SKIP_BODY;
 			}
 
+			if (var != null)
+				pageContext.setAttribute(var, this, scope);
 			return EVAL_BODY_INCLUDE;
 		}
 
@@ -87,6 +92,10 @@ public class ElasticIterator extends BodyTagSupport {
 			theDocument = new JSONObject(new JSONTokener(new StringReader(theHit.getSourceAsString())));
 			return EVAL_BODY_AGAIN;
 		}
+
+		if (var != null)
+			pageContext.removeAttribute(var);
+		
 		clearServiceState();
 		return SKIP_BODY;
 	}
@@ -140,6 +149,18 @@ public class ElasticIterator extends BodyTagSupport {
 
 	public void setStartCriteria(int startCriteria) {
 		this.startCriteria = startCriteria;
+	}
+
+	public String getVar() {
+		return var;
+	}
+
+	public void setVar(String var) {
+		this.var = var;
+	}
+	
+	public boolean getIsFirst() {
+		return hitFence == 0;
 	}
 
 }

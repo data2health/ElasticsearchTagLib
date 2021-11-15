@@ -17,6 +17,7 @@ src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermCount.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregationTermStatus.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticAggregator.java -text
+src/main/java/edu/uiowa/elasticsearch/ElasticArrayIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticBoost.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticCount.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticDocument.java -text
