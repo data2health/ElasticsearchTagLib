@@ -76,7 +76,6 @@ public class ElasticIterator extends BodyTagSupport {
 
 	public int doAfterBody() throws JspTagException {
 		if (limitCriteria <= 0 || (limitCriteria > 0 && hitFence >= limitCriteria + startCriteria - 1)) {
-			clearServiceState();
 			return SKIP_BODY;
 		}
 
@@ -85,7 +84,6 @@ public class ElasticIterator extends BodyTagSupport {
 			thresholdFence = theHit.getScore();
 
 			if (thresholdFence < thresholdCriteria) {
-				clearServiceState();
 				return SKIP_BODY;
 			}
 
@@ -93,14 +91,21 @@ public class ElasticIterator extends BodyTagSupport {
 			return EVAL_BODY_AGAIN;
 		}
 
+		return SKIP_BODY;
+	}
+
+    public int doEndTag() throws JspTagException, JspException {
 		if (var != null)
 			pageContext.removeAttribute(var);
 		
 		clearServiceState();
-		return SKIP_BODY;
+       return super.doEndTag();
 	}
 
 	private void clearServiceState() {
+		if (var != null)
+			pageContext.removeAttribute(var);
+		var = null;
 		this.theHits = null;
 		this.label = null;
 		theHit = null;
@@ -161,6 +166,10 @@ public class ElasticIterator extends BodyTagSupport {
 	
 	public boolean getIsFirst() {
 		return hitFence == 0;
+	}
+	
+	public int getCount() {
+		return (int) theHits.getTotalHits().value;
 	}
 
 }

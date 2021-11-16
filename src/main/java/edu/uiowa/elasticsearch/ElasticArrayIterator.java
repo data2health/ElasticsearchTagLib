@@ -108,7 +108,6 @@ public class ElasticArrayIterator extends BodyTagSupport {
 
 	public int doAfterBody() throws JspTagException {
 		if (limitCriteria <= 0 || (limitCriteria > 0 && hitFence >= limitCriteria + startCriteria - 1)) {
-			clearServiceState();
 			return SKIP_BODY;
 		}
 
@@ -117,11 +116,15 @@ public class ElasticArrayIterator extends BodyTagSupport {
 			return EVAL_BODY_AGAIN;
 		}
 		
+		return SKIP_BODY;
+    }
+
+    public int doEndTag() throws JspTagException, JspException {
 		if (var != null)
 			pageContext.removeAttribute(var);
 		
 		clearServiceState();
-		return SKIP_BODY;
+       return super.doEndTag();
 	}
 
 	private void clearServiceState() {
@@ -185,6 +188,11 @@ public class ElasticArrayIterator extends BodyTagSupport {
 	}
 	
 	public boolean getIsLast() {
-		return hitFence >= theArray.length();
+		return hitFence >= theArray.length() || hitFence >= limitCriteria;
 	}
+	
+	public int getCount() {
+		return (int) theArray.length();
+	}
+
 }
