@@ -5,12 +5,12 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.log4j.Logger;
 
-import edu.uiowa.elasticsearch.util.Boost;
+import edu.uiowa.elasticsearch.util.SearchField;
 
 @SuppressWarnings("serial")
 
-public class ElasticBoost extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticBoost.class);
+public class ElasticSearchField extends BodyTagSupport {
+	static Logger logger = Logger.getLogger(ElasticSearchField.class);
 
 	ElasticIndex theIndex = null;
 	String fieldName = null;
@@ -19,7 +19,7 @@ public class ElasticBoost extends BodyTagSupport {
 	public int doStartTag() throws JspException {
 		theIndex = (ElasticIndex) findAncestorWithClass(this, ElasticIndex.class);
 		
-		theIndex.boosts.add(new Boost(fieldName, boost));
+		theIndex.searchFields.add(new SearchField(fieldName, boost));
 		
 		return SKIP_BODY;
 	}

@@ -24,7 +24,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilde
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import edu.uiowa.elasticsearch.util.Aggregator;
-import edu.uiowa.elasticsearch.util.Boost;
+import edu.uiowa.elasticsearch.util.SearchField;
 import edu.uiowa.elasticsearch.util.Filter;
 
 @SuppressWarnings("serial")
@@ -39,6 +39,8 @@ public class ElasticSearch extends BodyTagSupport {
 	String indexPattern = null;
 	String queryString = null;
 	int limitCriteria = Integer.MAX_VALUE;
+	boolean fetchSource = true;
+	boolean fieldWildCard = true;
 
 	public int doStartTag() throws JspException {
 		theIndex = (ElasticIndex) findAncestorWithClass(this, ElasticIndex.class);
@@ -58,9 +60,11 @@ public class ElasticSearch extends BodyTagSupport {
 
 			org.elasticsearch.action.search.SearchRequest searchRequest = new org.elasticsearch.action.search.SearchRequest("cd2h-*"); 
 			
-			MultiMatchQueryBuilder matcher = new MultiMatchQueryBuilder(queryString, "*");
-			for (Boost boost : theIndex.boosts) {
-				matcher.field(boost.getFieldName(), boost.getBoost());
+			MultiMatchQueryBuilder matcher = new MultiMatchQueryBuilder(queryString);
+			if (fieldWildCard)
+				matcher.field("*");
+			for (SearchField searchField : theIndex.searchFields) {
+				matcher.field(searchField.getFieldName(), searchField.getBoost());
 			}
 			matcher.type(Type.CROSS_FIELDS);
 			matcher.operator(Operator.AND);
@@ -82,6 +86,7 @@ public class ElasticSearch extends BodyTagSupport {
 			
 			searchRequest.source(searchSourceBuilder);
 			searchSourceBuilder.size(limitCriteria);
+			searchSourceBuilder.fetchSource(fetchSource);
 			
 			for (Aggregator aggregation : theIndex.aggregations.values()) {
 				TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms(aggregation.getDisplayName()).field(aggregation.getFieldName());
@@ -159,6 +164,22 @@ public class ElasticSearch extends BodyTagSupport {
 
 	public void setLimitCriteria(int limitCriteria) {
 		this.limitCriteria = limitCriteria;
+	}
+
+	public boolean isFetchSource() {
+		return fetchSource;
+	}
+
+	public void setFetchSource(boolean fetchSource) {
+		this.fetchSource = fetchSource;
+	}
+
+	public boolean isFieldWildCard() {
+		return fieldWildCard;
+	}
+
+	public void setFieldWildCard(boolean fieldWildCard) {
+		this.fieldWildCard = fieldWildCard;
 	}
 
 }

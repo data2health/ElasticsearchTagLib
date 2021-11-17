@@ -1,10 +1,10 @@
 package edu.uiowa.elasticsearch.util;
 
-public class Boost {
+public class SearchField {
 	String fieldName = null;
 	float boost = 0;
 
-	public Boost(String fieldName, float boost) {
+	public SearchField(String fieldName, float boost) {
 		this.fieldName = fieldName;
 		this.boost = boost;
 	}

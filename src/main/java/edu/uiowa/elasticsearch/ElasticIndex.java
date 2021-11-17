@@ -16,7 +16,7 @@ import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.GetIndexResponse;
 
 import edu.uiowa.elasticsearch.util.Aggregator;
-import edu.uiowa.elasticsearch.util.Boost;
+import edu.uiowa.elasticsearch.util.SearchField;
 import edu.uiowa.elasticsearch.util.Filter;
 import edu.uiowa.elasticsearch.util.RestClientFactory;
 
@@ -29,7 +29,7 @@ public class ElasticIndex extends BodyTagSupport {
 	public Vector<String> indices = new Vector<String>();
 	Hashtable<String, Filter> filters = new Hashtable<String, Filter>();
 	Hashtable<String, Aggregator> aggregations = new Hashtable<String, Aggregator>();
-	List<Boost> boosts = new ArrayList<Boost>();
+	List<SearchField> searchFields = new ArrayList<SearchField>();
 	
 	public int doStartTag() throws JspException {
 		client = RestClientFactory.getClient(propertyName);

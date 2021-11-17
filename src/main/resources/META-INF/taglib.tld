@@ -70,8 +70,8 @@
 	</tag>
 
 	<tag>
-		<name>boost</name>
-		<tag-class>edu.uiowa.elasticsearch.ElasticBoost</tag-class>
+		<name>searchField</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticSearchField</tag-class>
 		<body-content>empty</body-content>
 
 		<attribute>
@@ -101,6 +101,18 @@
 
 		<attribute>
 			<name>limitCriteria</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>fieldWildCard</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+
+		<attribute>
+			<name>fetchSource</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
