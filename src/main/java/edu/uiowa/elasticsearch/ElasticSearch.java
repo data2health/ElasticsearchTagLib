@@ -87,6 +87,8 @@ public class ElasticSearch extends BodyTagSupport {
 			searchRequest.source(searchSourceBuilder);
 			searchSourceBuilder.size(limitCriteria);
 			searchSourceBuilder.fetchSource(fetchSource);
+			if (theIndex.haveResultFields())
+				searchSourceBuilder.fetchSource(theIndex.getResultIncludeFields(), theIndex.getResultExcludeFields());
 			
 			for (Aggregator aggregation : theIndex.aggregations.values()) {
 				TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms(aggregation.getDisplayName()).field(aggregation.getFieldName());

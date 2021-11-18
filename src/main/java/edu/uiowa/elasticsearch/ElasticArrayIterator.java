@@ -33,7 +33,7 @@ public class ElasticArrayIterator extends BodyTagSupport {
 	Object current = null;
 	JSONArray theArray = new JSONArray();
 	String label = null;
-	String delimiter = "/";
+	String delimiter = ".";
 	String var = null;
 
 	int limitCriteria = Integer.MAX_VALUE;
@@ -65,7 +65,7 @@ public class ElasticArrayIterator extends BodyTagSupport {
 				current = theIterator != null ? theIterator.theDocument.get(label) : ((JSONObject)theArrayIterator.theArray.get(theArrayIterator.hitFence-1)).opt(label);
 				log.debug("elastic array hit: " + label + ": " + current);
 			} else {
-				String[] nodes = label.split(delimiter);
+				String[] nodes = label.split(delimiter.equals(".") ? "\\"+delimiter : delimiter);
 				log.debug("elasic array hit path: " + ElasticHit.stringToArray(nodes));
 				current = theIterator.theDocument.opt(nodes[0]);
 				for (int i = 0; i < nodes.length; i++) {
@@ -136,7 +136,7 @@ public class ElasticArrayIterator extends BodyTagSupport {
 		theArray = new JSONArray();
 		current = null;
 		hitFence = 0;
-		delimiter = "/";
+		delimiter = ".";
 	}
 
 	public int getHitRank() {

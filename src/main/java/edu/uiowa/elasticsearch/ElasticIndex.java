@@ -30,6 +30,8 @@ public class ElasticIndex extends BodyTagSupport {
 	Hashtable<String, Filter> filters = new Hashtable<String, Filter>();
 	Hashtable<String, Aggregator> aggregations = new Hashtable<String, Aggregator>();
 	List<SearchField> searchFields = new ArrayList<SearchField>();
+	Vector<String> resultIncludeFields = new Vector<String>();
+	Vector<String> resultExcludeFields = new Vector<String>();
 	
 	public int doStartTag() throws JspException {
 		client = RestClientFactory.getClient(propertyName);
@@ -72,6 +74,22 @@ public class ElasticIndex extends BodyTagSupport {
 
 	public void setPropertyName(String propertyName) {
 		this.propertyName = propertyName;
+	}
+	
+	public boolean haveResultFields() {
+		return resultIncludeFields.size() > 0 || resultExcludeFields.size() > 0;
+	}
+	
+	public String[] getResultIncludeFields() {
+		if (resultIncludeFields == null || resultIncludeFields.size() == 0)
+			return null;
+		return resultIncludeFields.toArray(new String[resultIncludeFields.size()]);
+	}
+
+	public String[] getResultExcludeFields() {
+		if (resultExcludeFields == null || resultExcludeFields.size() == 0)
+			return null;
+		return resultExcludeFields.toArray(new String[resultExcludeFields.size()]);
 	}
 
 }

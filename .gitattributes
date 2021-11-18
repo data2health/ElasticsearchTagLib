@@ -26,6 +26,8 @@ src/main/java/edu/uiowa/elasticsearch/ElasticIndex.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticIndexName.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticIterator.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticNameIterator.java -text
+src/main/java/edu/uiowa/elasticsearch/ElasticResultExcludeField.java -text
+src/main/java/edu/uiowa/elasticsearch/ElasticResultIncludeField.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticSearch.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticSearchField.java -text
 src/main/java/edu/uiowa/elasticsearch/util/Aggregator.java -text

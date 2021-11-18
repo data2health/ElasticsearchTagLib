@@ -19,7 +19,7 @@ public class ElasticHit extends BodyTagSupport {
 	ElasticIterator theIterator = null;
 	ElasticArrayIterator theArrayIterator = null;
 	String label = null;
-	String delimiter = "/";
+	String delimiter = ".";
 	private static final Log log = LogFactory.getLog(ElasticHit.class);
 
 	public int doStartTag() throws JspTagException {
@@ -53,7 +53,7 @@ public class ElasticHit extends BodyTagSupport {
 						pageContext.getOut().print(display);
 					}
 				} else {
-					String[] nodes = label.split(delimiter);
+					String[] nodes = label.split(delimiter.equals(".") ? "\\"+delimiter : delimiter);
 					log.debug("elasic hit path: " + stringToArray(nodes));
 					Object current = theIterator.theDocument.opt(nodes[0]);
 					for (int i = 0; i < nodes.length; i++) {

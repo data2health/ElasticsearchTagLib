@@ -89,6 +89,30 @@
 	</tag>
 
 	<tag>
+		<name>resultIncludeField</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticResultIncludeField</tag-class>
+		<body-content>empty</body-content>
+
+		<attribute>
+			<name>fieldName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
+		<name>resultExcludeField</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticResultExcludeField</tag-class>
+		<body-content>empty</body-content>
+
+		<attribute>
+			<name>fieldName</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<name>search</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticSearch</tag-class>
 		<body-content>JSP</body-content>
