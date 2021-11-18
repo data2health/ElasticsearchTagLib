@@ -58,7 +58,7 @@ public class ElasticSearch extends BodyTagSupport {
 			logger.info(client.info(RequestOptions.DEFAULT).getNodeName());
 			logger.info(client.info(RequestOptions.DEFAULT).getTagline());
 
-			org.elasticsearch.action.search.SearchRequest searchRequest = new org.elasticsearch.action.search.SearchRequest("cd2h-*"); 
+			org.elasticsearch.action.search.SearchRequest searchRequest = new org.elasticsearch.action.search.SearchRequest("*"); 
 			
 			MultiMatchQueryBuilder matcher = new MultiMatchQueryBuilder(queryString);
 			if (fieldWildCard)
