@@ -67,6 +67,10 @@ public class ElasticIndex extends BodyTagSupport {
 		filters = new Hashtable<String, Filter>();
 		aggregations = new Hashtable<String, Aggregator>();
 	}
+	
+	public String getIndexPattern() {
+		return RestClientFactory.getIndexPattern();
+	}
 
 	public String getPropertyName() {
 		return propertyName;

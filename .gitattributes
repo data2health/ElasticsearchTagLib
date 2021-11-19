@@ -22,6 +22,7 @@ src/main/java/edu/uiowa/elasticsearch/ElasticCount.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticDocument.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticFilter.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticHit.java -text
+src/main/java/edu/uiowa/elasticsearch/ElasticHitRank.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticIndex.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticIndexName.java -text
 src/main/java/edu/uiowa/elasticsearch/ElasticIterator.java -text

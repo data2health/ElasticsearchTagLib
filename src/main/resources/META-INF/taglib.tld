@@ -228,6 +228,12 @@
 	</tag>
 	
 	<tag>
+		<name>hitRank</name>
+		<tag-class>edu.uiowa.elasticsearch.ElasticHitRank</tag-class>
+		<body-content>empty</body-content>
+	</tag>
+	
+	<tag>
 		<name>document</name>
 		<tag-class>edu.uiowa.elasticsearch.ElasticDocument</tag-class>
 		<body-content>empty</body-content>

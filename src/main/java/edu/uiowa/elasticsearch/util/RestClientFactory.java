@@ -49,4 +49,8 @@ public class RestClientFactory {
     public static void close() throws IOException {
     	restClient.close();
     }
+    
+    public static String getIndexPattern() {
+    	return prop_file.getProperty("index_pattern");
+    }
 }
