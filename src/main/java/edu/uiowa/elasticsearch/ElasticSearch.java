@@ -13,6 +13,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.Operator;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.TermsQueryBuilder;
 import org.elasticsearch.index.query.MultiMatchQueryBuilder.Type;
 import org.elasticsearch.search.SearchHits;
@@ -38,7 +39,7 @@ public class ElasticSearch extends BodyTagSupport {
 	String label = null;
 	String indexPattern = null;
 	String queryString = null;
-	int limitCriteria = Integer.MAX_VALUE;
+	int limitCriteria = 1000;
 	boolean fetchSource = true;
 	boolean fieldWildCard = true;
 
@@ -59,23 +60,37 @@ public class ElasticSearch extends BodyTagSupport {
 			logger.info(client.info(RequestOptions.DEFAULT).getTagline());
 
 			org.elasticsearch.action.search.SearchRequest searchRequest = new org.elasticsearch.action.search.SearchRequest(theIndex.getIndexPattern()); 
-			
-			MultiMatchQueryBuilder matcher = new MultiMatchQueryBuilder(queryString);
-			if (fieldWildCard)
-				matcher.field("*");
-			for (SearchField searchField : theIndex.searchFields) {
-				matcher.field(searchField.getFieldName(), searchField.getBoost());
+			QueryBuilders.matchQuery("cmd", 12);
+			MultiMatchQueryBuilder matcher = null;
+			if (queryString != null) {
+				matcher = new MultiMatchQueryBuilder(queryString);
+				if (fieldWildCard)
+					matcher.field("*");
+				for (SearchField searchField : theIndex.searchFields) {
+					matcher.field(searchField.getFieldName(), searchField.getBoost());
+				}
+				matcher.type(Type.CROSS_FIELDS);
+				matcher.operator(Operator.AND);
 			}
-			matcher.type(Type.CROSS_FIELDS);
-			matcher.operator(Operator.AND);
-
 			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 			
-			if (theIndex.filters.size() == 0) {
-				searchSourceBuilder.query(matcher); 				
+			if (matcher == null && theIndex.searchFields.size() == 0) {
+				throw new JspTagException("Search tag has no query string and no search tags.");				
+			}
+			
+			if (matcher != null && theIndex.filters.size() == 0) {
+				searchSourceBuilder.query(matcher);
 			} else {
 				BoolQueryBuilder booler = new BoolQueryBuilder();
-				booler.must(matcher);
+
+				if (matcher != null) {
+					booler.must(matcher);
+				} else {
+					for (SearchField searchField : theIndex.searchFields) {
+						booler.must(QueryBuilders.matchQuery(searchField.getFieldName(), searchField.getFormattedValue()));
+					}
+
+				}
 				
 				for(Filter filter : theIndex.filters.values()) {
 					TermsQueryBuilder termQuery = new TermsQueryBuilder(filter.getFieldName(), filter.getTerms());
@@ -99,9 +114,9 @@ public class ElasticSearch extends BodyTagSupport {
 			logger.info("query: " + searchSourceBuilder.query().toString());
 			org.elasticsearch.action.search.SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			hits = searchResponse.getHits();
-			if (searchResponse.getAggregations() != null)
-				aggregations = searchResponse.getAggregations();
 			logger.info("hit count: " + hits.getTotalHits().value);
+			if (searchResponse.getAggregations() != null) {
+				aggregations = searchResponse.getAggregations();
 
 			for (Aggregation agg : searchResponse.getAggregations()) {
 			    String type = agg.getType();
@@ -113,6 +128,7 @@ public class ElasticSearch extends BodyTagSupport {
 					for (Terms.Bucket bucket : buckets) {
 			    	    logger.info("\t" + bucket.getKeyAsString() +" ("+bucket.getDocCount()+")");
 					}
+			}
 			}
 			
 			return EVAL_BODY_INCLUDE;

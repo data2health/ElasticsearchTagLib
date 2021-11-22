@@ -62,7 +62,7 @@ public class ElasticArrayIterator extends BodyTagSupport {
 		
 			log.debug("delimiter: " + delimiter);
 			if (!label.contains(delimiter)) {
-				current = theIterator != null ? theIterator.theDocument.get(label) : ((JSONObject)theArrayIterator.theArray.get(theArrayIterator.hitFence-1)).opt(label);
+				current = theIterator != null ? theIterator.theDocument.opt(label) : ((JSONObject)theArrayIterator.theArray.get(theArrayIterator.hitFence-1)).opt(label);
 				log.debug("elastic array hit: " + label + ": " + current);
 			} else {
 				String[] nodes = label.split(delimiter.equals(".") ? "\\"+delimiter : delimiter);
@@ -149,6 +149,10 @@ public class ElasticArrayIterator extends BodyTagSupport {
 
 	public void setRankOffset(int hitOffset) {
 		this.hitOffset = hitOffset;
+	}
+	
+	public Object getCurrent() {
+		return current;
 	}
 
 	public String getLabel() {

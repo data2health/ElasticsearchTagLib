@@ -64,6 +64,9 @@ public class ElasticIndex extends BodyTagSupport {
 	private void clearServiceState() {
 		client = null;
 		indices = new Vector<String>();
+		searchFields = new ArrayList<SearchField>();
+		resultIncludeFields = new Vector<String>();
+		resultExcludeFields = new Vector<String>();
 		filters = new Hashtable<String, Filter>();
 		aggregations = new Hashtable<String, Aggregator>();
 	}

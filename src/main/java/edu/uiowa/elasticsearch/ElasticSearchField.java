@@ -14,12 +14,13 @@ public class ElasticSearchField extends BodyTagSupport {
 
 	ElasticIndex theIndex = null;
 	String fieldName = null;
+	String value = null;
 	float boost = 1;
 	
 	public int doStartTag() throws JspException {
 		theIndex = (ElasticIndex) findAncestorWithClass(this, ElasticIndex.class);
 		
-		theIndex.searchFields.add(new SearchField(fieldName, boost));
+		theIndex.searchFields.add(new SearchField(fieldName, value, boost));
 		
 		return SKIP_BODY;
 	}
@@ -42,6 +43,18 @@ public class ElasticSearchField extends BodyTagSupport {
 
 	public void setBoost(float boost) {
 		this.boost = boost;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	public String getFormattedValue() {
+		return value;
 	}
 
 }
