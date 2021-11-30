@@ -1,7 +1,9 @@
 package edu.uiowa.elasticsearch;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -20,6 +22,7 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.composite.*;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -106,9 +109,19 @@ public class ElasticSearch extends BodyTagSupport {
 				searchSourceBuilder.fetchSource(theIndex.getResultIncludeFields(), theIndex.getResultExcludeFields());
 			
 			for (Aggregator aggregation : theIndex.aggregations.values()) {
-				TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms(aggregation.getDisplayName()).field(aggregation.getFieldName());
-				aggregationBuilder.size(aggregation.getSize());
-				searchSourceBuilder.aggregation(aggregationBuilder);				
+				if (aggregation.isComposite()) {
+					List<CompositeValuesSourceBuilder<?>> sources = new ArrayList<>();
+					for (String fieldName : aggregation.getFieldNames()) {
+				        sources.add(new TermsValuesSourceBuilder(fieldName).field(fieldName));						
+					}
+			        CompositeAggregationBuilder compositeAggregationBuilder = new CompositeAggregationBuilder(aggregation.getDisplayName(), sources);
+			        compositeAggregationBuilder.size(aggregation.getSize());					
+					searchSourceBuilder.aggregation(compositeAggregationBuilder);
+				} else {
+					TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms(aggregation.getDisplayName()).field(aggregation.getFieldName());
+					aggregationBuilder.size(aggregation.getSize());
+					searchSourceBuilder.aggregation(aggregationBuilder);
+				}
 			}
 
 			logger.info("query: " + searchSourceBuilder.query().toString());

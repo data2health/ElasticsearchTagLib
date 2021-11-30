@@ -27,6 +27,8 @@ public class ElasticAggregator extends BodyTagSupport {
 		if (current == null) {
 			current = new Aggregator(displayName, fieldName, size);
 			aggregations.put(displayName, current);
+		} else {
+			current.addFieldName(fieldName);
 		}
 		return SKIP_BODY;
 	}

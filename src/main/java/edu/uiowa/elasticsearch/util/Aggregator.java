@@ -1,18 +1,24 @@
 package edu.uiowa.elasticsearch.util;
 
+import java.util.Vector;
+
 public class Aggregator {
 	String displayName = null;
-	String fieldName = null;
+	Vector<String> fieldNames = new Vector<String>();
 	int size = 0;
 
 	public Aggregator(String displayName, String fieldName, int size) {
 		this.displayName = displayName;
-		this.fieldName = fieldName;
+		this.fieldNames.add(fieldName);
 		this.size = size;
+	}
+	
+	public void addFieldName(String fieldName) {
+		fieldNames.add(fieldName);
 	}
 
 	public String getFieldName() {
-		return fieldName;
+		return fieldNames.elementAt(0);
 	}
 	
 	public String getDisplayName() {
@@ -27,4 +33,13 @@ public class Aggregator {
 		this.size = size;
 	}
 	
+	public boolean isComposite() {
+		return fieldNames.size() > 1;
+	}
+	
+	public String[] getFieldNames() {
+		if (fieldNames == null || fieldNames.size() == 0)
+			return null;
+		return fieldNames.toArray(new String[fieldNames.size()]);
+	}
 }
