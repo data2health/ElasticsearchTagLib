@@ -34,7 +34,8 @@ public class Aggregator {
 	}
 	
 	public boolean isComposite() {
-		return fieldNames.size() > 1;
+		return false;
+//		return fieldNames.size() > 1;
 	}
 	
 	public String[] getFieldNames() {

@@ -6,11 +6,14 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.log4j.Logger;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 @SuppressWarnings("serial")
 
 public class ElasticAggregationCount extends BodyTagSupport {
+	static Logger logger = Logger.getLogger(ElasticAggregationCount.class);
+
 	ElasticSearch theSearch = null;
 	ElasticAggregation theAggregation = null;
 
@@ -22,7 +25,15 @@ public class ElasticAggregationCount extends BodyTagSupport {
 			throw new JspTagException("Aggregation Count tag not nesting in an Aggregation instance");
 		}
 		try {
-			pageContext.getOut().print(((Terms)theAggregation.theAggregation).getBuckets().size());
+			switch (theAggregation.theAggregation.getType()) {
+			case "sterms":
+				pageContext.getOut().print(((Terms)theAggregation.theAggregation).getBuckets().size());
+				break;
+			case "composite":
+				break;
+			default:
+				logger.error("aggregation type not handled: " + theAggregation.theAggregation.getType());
+			}
 		} catch (IOException e) {
 		}
 

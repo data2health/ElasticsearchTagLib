@@ -23,6 +23,7 @@ import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.composite.*;
+import org.elasticsearch.search.aggregations.bucket.composite.ParsedComposite.ParsedBucket;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -112,7 +113,8 @@ public class ElasticSearch extends BodyTagSupport {
 				if (aggregation.isComposite()) {
 					List<CompositeValuesSourceBuilder<?>> sources = new ArrayList<>();
 					for (String fieldName : aggregation.getFieldNames()) {
-				        sources.add(new TermsValuesSourceBuilder(fieldName).field(fieldName));						
+						logger.info("composite: " + aggregation.getDisplayName() + " : " + fieldName);
+				        sources.add(new TermsValuesSourceBuilder(fieldName.replace('.', '_')).field(fieldName));						
 					}
 			        CompositeAggregationBuilder compositeAggregationBuilder = new CompositeAggregationBuilder(aggregation.getDisplayName(), sources);
 			        compositeAggregationBuilder.size(aggregation.getSize());					
@@ -134,13 +136,26 @@ public class ElasticSearch extends BodyTagSupport {
 			for (Aggregation agg : searchResponse.getAggregations()) {
 			    String type = agg.getType();
 			    logger.info("aggregation: " + type + "\tname: " + agg.getName());
-			    
+			    switch (type) {
+			    case "sterms":
 					Terms terms = searchResponse.getAggregations().get(agg.getName());
 					@SuppressWarnings("unchecked")
 					Collection<Terms.Bucket> buckets = (Collection<Terms.Bucket>) terms.getBuckets();
 					for (Terms.Bucket bucket : buckets) {
 			    	    logger.info("\t" + bucket.getKeyAsString() +" ("+bucket.getDocCount()+")");
 					}
+			    	break;
+			    case "composite":
+			    	ParsedComposite parsedComposite = (ParsedComposite) agg;
+		            parsedComposite.getBuckets().forEach(parsedBucket -> parsedBucket.getKey().forEach((k, v) -> logger.info(String.valueOf(v))));
+			    	logger.info(parsedComposite.getBuckets());
+					for (ParsedBucket bucket : parsedComposite.getBuckets()) {
+			    	    logger.info("\t" + bucket.getKeyAsString() +" ("+bucket.getDocCount()+")");
+					}
+					break;
+			    default:
+			    	logger.error("unhandled aggregation type: " + type);
+			    }
 			}
 			}
 			
