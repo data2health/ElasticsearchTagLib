@@ -35,7 +35,10 @@ public class Aggregator {
 	
 	public boolean isComposite() {
 		return false;
-//		return fieldNames.size() > 1;
+	}
+	
+	public boolean isMultiField() {
+		return fieldNames.size() > 1;
 	}
 	
 	public String[] getFieldNames() {
