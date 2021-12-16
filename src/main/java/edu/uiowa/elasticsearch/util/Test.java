@@ -5,8 +5,8 @@ import java.io.StringReader;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -34,11 +34,10 @@ import co.elastic.clients.elasticsearch._core.SearchResponse;
 import co.elastic.clients.elasticsearch._core.search.Hit;
 
 public class Test {
-	static Logger logger = Logger.getLogger(Test.class);
+	static Logger logger = LogManager.getLogger(Test.class);
 	protected static LocalProperties prop_file = null;
 
 	public static void main(String[] args) throws IOException {
-		PropertyConfigurator.configure(args[0]);
 		test3(queryString(args));
 	}
 	

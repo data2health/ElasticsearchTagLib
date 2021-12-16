@@ -5,14 +5,15 @@ import java.util.Hashtable;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.uiowa.elasticsearch.util.Aggregator;
 
 @SuppressWarnings("serial")
 
 public class ElasticAggregator extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticAggregator.class);
+	static Logger logger = LogManager.getLogger(ElasticAggregator.class);
 
 	ElasticIndex theIndex = null;
 	String displayName = null;

@@ -9,7 +9,8 @@ import java.util.Vector;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.GetIndexRequest;
@@ -23,7 +24,7 @@ import edu.uiowa.elasticsearch.util.RestClientFactory;
 @SuppressWarnings("serial")
 
 public class ElasticIndex extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticIndex.class);
+	static Logger logger = LogManager.getLogger(ElasticIndex.class);
 	String propertyName = null;
 	RestHighLevelClient client = null;
 	public Vector<String> indices = new Vector<String>();

@@ -3,13 +3,16 @@ package edu.uiowa.elasticsearch;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
@@ -35,7 +38,7 @@ import edu.uiowa.elasticsearch.util.Filter;
 @SuppressWarnings("serial")
 
 public class ElasticSearch extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticSearch.class);
+	static Logger logger = LogManager.getLogger(ElasticSearch.class);
 
 	ElasticIndex theIndex = null;
 	SearchHits hits = null;
@@ -73,6 +76,7 @@ public class ElasticSearch extends BodyTagSupport {
 				for (SearchField searchField : theIndex.searchFields) {
 					matcher.field(searchField.getFieldName(), searchField.getBoost());
 				}
+				matcher.field("entity2",1);
 				matcher.type(Type.CROSS_FIELDS);
 				matcher.operator(Operator.AND);
 			}
@@ -125,8 +129,15 @@ public class ElasticSearch extends BodyTagSupport {
 					searchSourceBuilder.aggregation(aggregationBuilder);
 				}
 			}
+			
+			Map<String, Object> elements = new HashMap<String, Object>();
+			elements.put("type", "boolean");
+			elements.put("script", "emit(doc['tool.portalDisplay'].value);");
+			Map<String, Object> runtimeMappings = new HashMap<String, Object>();
+			runtimeMappings.put("entity2", elements);
+			searchSourceBuilder.runtimeMappings(runtimeMappings);
 
-			logger.info("query: " + searchSourceBuilder.query().toString());
+			logger.info("query: " + searchSourceBuilder.toString());
 			org.elasticsearch.action.search.SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			hits = searchResponse.getHits();
 			logger.info("hit count: " + hits.getTotalHits().value);

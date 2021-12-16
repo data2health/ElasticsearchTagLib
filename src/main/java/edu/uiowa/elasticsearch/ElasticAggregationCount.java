@@ -6,13 +6,14 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 
 @SuppressWarnings("serial")
 
 public class ElasticAggregationCount extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticAggregationCount.class);
+	static Logger logger = LogManager.getLogger(ElasticAggregationCount.class);
 
 	ElasticSearch theSearch = null;
 	ElasticAggregation theAggregation = null;

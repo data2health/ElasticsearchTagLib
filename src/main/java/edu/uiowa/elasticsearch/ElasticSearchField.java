@@ -3,14 +3,15 @@ package edu.uiowa.elasticsearch;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import edu.uiowa.elasticsearch.util.SearchField;
 
 @SuppressWarnings("serial")
 
 public class ElasticSearchField extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticSearchField.class);
+	static Logger logger = LogManager.getLogger(ElasticSearchField.class);
 
 	ElasticIndex theIndex = null;
 	String fieldName = null;

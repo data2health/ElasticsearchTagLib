@@ -8,14 +8,15 @@ import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.nio.client.HttpAsyncClientBuilder;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 import org.elasticsearch.client.RestClientBuilder.HttpClientConfigCallback;
 import org.elasticsearch.client.RestHighLevelClient;
 
 public class RestClientFactory {
-    static Logger logger = Logger.getLogger(RestClientFactory.class);
+    static Logger logger = LogManager.getLogger(RestClientFactory.class);
     protected static LocalProperties prop_file = null;
     
     static private RestClient restClient = null;

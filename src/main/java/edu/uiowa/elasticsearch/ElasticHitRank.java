@@ -9,8 +9,6 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.lucene.index.CorruptIndexException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 @SuppressWarnings("serial")
 

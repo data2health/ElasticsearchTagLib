@@ -14,7 +14,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
@@ -22,7 +23,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 @SuppressWarnings("serial")
 
 public class ElasticAggregationTermIterator extends BodyTagSupport {
-	static Logger logger = Logger.getLogger(ElasticAggregationTermIterator.class);
+	static Logger logger = LogManager.getLogger(ElasticAggregationTermIterator.class);
 	List<Aggregation> theAggregations = null;
 	ElasticAggregation theAggregation = null;
 	private int hitFence = 0;
