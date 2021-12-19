@@ -12,8 +12,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.elasticsearch.search.aggregations.Aggregation;
@@ -34,13 +32,12 @@ public class ElasticAggregationTermIterator extends BodyTagSupport {
 	int limitCriteria = Integer.MAX_VALUE;
 	int startCriteria = 1;
 	double thresholdCriteria = 0.0;
-	private static final Log log = LogFactory.getLog(ElasticAggregationTermIterator.class);
 
 	@SuppressWarnings("unchecked")
 	public int doStartTag() throws JspException {
-		log.trace("limit: " + limitCriteria);
-		log.trace("start: " + startCriteria);
-		log.trace("threshold: " + thresholdCriteria);
+		logger.trace("limit: " + limitCriteria);
+		logger.trace("start: " + startCriteria);
+		logger.trace("threshold: " + thresholdCriteria);
 		theAggregation = (ElasticAggregation) findAncestorWithClass(this, ElasticAggregation.class);
 
 		if (theAggregation == null) {

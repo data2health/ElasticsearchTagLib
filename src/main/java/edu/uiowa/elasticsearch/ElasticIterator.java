@@ -13,8 +13,8 @@ import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.json.JSONObject;
@@ -36,13 +36,13 @@ public class ElasticIterator extends BodyTagSupport {
 	int limitCriteria = Integer.MAX_VALUE;
 	int startCriteria = 1;
 	double thresholdCriteria = 0.0;
-	private static final Log log = LogFactory.getLog(ElasticIterator.class);
+	static Logger logger = LogManager.getLogger(ElasticIterator.class);
     private int scope = PageContext.PAGE_SCOPE;
 
 	public int doStartTag() throws JspException {
-		log.trace("limit: " + limitCriteria);
-		log.trace("start: " + startCriteria);
-		log.trace("threshold: " + thresholdCriteria);
+		logger.trace("limit: " + limitCriteria);
+		logger.trace("start: " + startCriteria);
+		logger.trace("threshold: " + thresholdCriteria);
 		theSearch = (ElasticSearch) findAncestorWithClass(this, ElasticSearch.class);
 		if (limitCriteria == Integer.MAX_VALUE)
 			limitCriteria = theSearch.getLimitCriteria();

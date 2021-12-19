@@ -6,8 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,7 +20,7 @@ public class ElasticHit extends BodyTagSupport {
 	ElasticArrayIterator theArrayIterator = null;
 	String label = null;
 	String delimiter = ".";
-	private static final Log log = LogFactory.getLog(ElasticHit.class);
+	static Logger logger = LogManager.getLogger(ElasticHit.class);
 
 	public int doStartTag() throws JspTagException {
 		theSearch = (ElasticSearch) findAncestorWithClass(this, ElasticSearch.class);
@@ -33,57 +33,57 @@ public class ElasticHit extends BodyTagSupport {
 
 		try {
 			if (label.equals("score")) {
-				log.debug("elastic score hit: " + label + ": " + theIterator.theHit.getScore());
+				logger.debug("elastic score hit: " + label + ": " + theIterator.theHit.getScore());
 				pageContext.getOut().print(theIterator.theHit.getScore());
 			} else if (label.equals("_index")) {
-				log.debug("elastic index hit: " + label + ": " + theIterator.theHit.getIndex());
+				logger.debug("elastic index hit: " + label + ": " + theIterator.theHit.getIndex());
 				pageContext.getOut().print(theIterator.theHit.getIndex());
 			} else if (label.equals("_id")) {
-				log.debug("elastic id hit: " + label + ": " + theIterator.theHit.getId());
+				logger.debug("elastic id hit: " + label + ": " + theIterator.theHit.getId());
 				pageContext.getOut().print(theIterator.theHit.getId().replaceAll("[^a-zA-Z0-9_]+", "")); // in case the id contains problematic characters
 			} else {
-				log.debug("delimiter: " + delimiter);
+				logger.debug("delimiter: " + delimiter);
 				if (!label.contains(delimiter)) {
 					if (label.equals("")) {
-						log.debug("elastic hit: " + label + ": " + theArrayIterator.current);
+						logger.debug("elastic hit: " + label + ": " + theArrayIterator.current);
 						pageContext.getOut().print(theArrayIterator.current);
 					} else {
 						String display = (theArrayIterator == null ? theIterator.theDocument.optString(label) : ((JSONObject)(theArrayIterator.current)).optString(label));
-						log.debug("elastic hit: " + label + ": " + display);
+						logger.debug("elastic hit: " + label + ": " + display);
 						pageContext.getOut().print(display);
 					}
 				} else {
 					String[] nodes = label.split(delimiter.equals(".") ? "\\"+delimiter : delimiter);
-					log.debug("elasic hit path: " + stringToArray(nodes));
+					logger.debug("elasic hit path: " + stringToArray(nodes));
 					Object current = theIterator.theDocument.opt(nodes[0]);
 					for (int i = 0; i < nodes.length; i++) {
 						if (current == null || current == org.json.JSONObject.NULL) {
-							log.debug("elastic hit: " + nodes[i] + ": <missing>");
+							logger.debug("elastic hit: " + nodes[i] + ": <missing>");
 							pageContext.getOut().print("");							
 						} else if (current instanceof JSONObject) {
 							JSONObject object = (JSONObject)current;
-							log.debug("elasic hit path element: " + nodes[i]);
+							logger.debug("elasic hit path element: " + nodes[i]);
 							current = object.opt(nodes[i+1]);
 						} else if (current instanceof JSONArray) {
-							log.debug("elasic hit array path element: " + nodes[i]);
+							logger.debug("elasic hit array path element: " + nodes[i]);
 							if (((JSONArray) current).length() == 0) {
-								log.debug("elastic hit: " + nodes[i] + ": <array empty>");
+								logger.debug("elastic hit: " + nodes[i] + ": <array empty>");
 								pageContext.getOut().print("");
 								current = null;
 							} else
 								current = ((JSONArray) current).get(0);
 							i--;
 						} else {
-							log.debug("elastic hit: " + label + ": " + ((String)current));
+							logger.debug("elastic hit: " + label + ": " + ((String)current));
 							pageContext.getOut().print(((String)current));
 						}
 					}
 				}
 			}
 		} catch (CorruptIndexException e) {
-			log.error("Corruption Exception", e);
+			logger.error("Corruption Exception", e);
 		} catch (IOException e) {
-			log.error("IO Exception", e);
+			logger.error("IO Exception", e);
 		}
 
 		return SKIP_BODY;

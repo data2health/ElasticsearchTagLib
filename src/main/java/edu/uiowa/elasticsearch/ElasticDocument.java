@@ -6,8 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 
 @SuppressWarnings("serial")
@@ -15,7 +15,7 @@ import org.apache.lucene.index.CorruptIndexException;
 public class ElasticDocument extends BodyTagSupport {
 	ElasticSearch theSearch = null;
 	ElasticIterator theIterator = null;
-	private static final Log log = LogFactory.getLog(ElasticDocument.class);
+	static Logger logger = LogManager.getLogger(ElasticDocument.class);
 	
 	boolean escape = false;
 
@@ -28,15 +28,15 @@ public class ElasticDocument extends BodyTagSupport {
 		}
 
 		try {
-			log.info("response document: " + theIterator.theDocument.toString(3));
+			logger.info("response document: " + theIterator.theDocument.toString(3));
 			if (escape)
 				pageContext.getOut().print(theIterator.theDocument.toString(3).replaceAll("<", "&lt")); // presenting embedded tags can break things
 			else
 				pageContext.getOut().print(theIterator.theDocument.toString(3));
 		} catch (CorruptIndexException e) {
-			log.error("Corruption Exception", e);
+			logger.error("Corruption Exception", e);
 		} catch (IOException e) {
-			log.error("IO Exception", e);
+			logger.error("IO Exception", e);
 		}
 
 		return SKIP_BODY;

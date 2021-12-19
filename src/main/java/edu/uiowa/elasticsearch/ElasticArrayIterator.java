@@ -12,8 +12,8 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.Tag;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.json.JSONArray;
@@ -38,12 +38,12 @@ public class ElasticArrayIterator extends BodyTagSupport {
 
 	int limitCriteria = Integer.MAX_VALUE;
 	int startCriteria = 1;
-	private static final Log log = LogFactory.getLog(ElasticArrayIterator.class);
+	static Logger logger = LogManager.getLogger(ElasticArrayIterator.class);
     private int scope = PageContext.PAGE_SCOPE;
 
 	public int doStartTag() throws JspException {
-		log.trace("limit: " + limitCriteria);
-		log.trace("start: " + startCriteria);
+		logger.trace("limit: " + limitCriteria);
+		logger.trace("start: " + startCriteria);
 
 		Tag ancestor = this.getParent();
 		do {
@@ -57,38 +57,38 @@ public class ElasticArrayIterator extends BodyTagSupport {
 				ancestor = ancestor.getParent();
 			}
 		} while (theIterator == null && theArrayIterator == null);
-		log.debug("ancestor: " + ancestor + "\tmain: " + (ancestor instanceof ElasticIterator) + "\tarray: " + (ancestor instanceof ElasticArrayIterator));
-		log.debug(theArrayIterator + "\t" + theIterator);
+		logger.debug("ancestor: " + ancestor + "\tmain: " + (ancestor instanceof ElasticIterator) + "\tarray: " + (ancestor instanceof ElasticArrayIterator));
+		logger.debug(theArrayIterator + "\t" + theIterator);
 		
-			log.debug("delimiter: " + delimiter);
+		logger.debug("delimiter: " + delimiter);
 			if (!label.contains(delimiter)) {
 				current = theIterator != null ? theIterator.theDocument.opt(label) : ((JSONObject)theArrayIterator.theArray.get(theArrayIterator.hitFence-1)).opt(label);
-				log.debug("elastic array hit: " + label + ": " + current);
+				logger.debug("elastic array hit: " + label + ": " + current);
 			} else {
 				String[] nodes = label.split(delimiter.equals(".") ? "\\"+delimiter : delimiter);
-				log.debug("elasic array hit path: " + ElasticHit.stringToArray(nodes));
+				logger.debug("elasic array hit path: " + ElasticHit.stringToArray(nodes));
 				current = theIterator.theDocument.opt(nodes[0]);
 				for (int i = 0; i < nodes.length; i++) {
 					if (current == null || current == org.json.JSONObject.NULL) {
-						log.debug("elastic hit: " + nodes[i] + ": <missing>");
+						logger.debug("elastic hit: " + nodes[i] + ": <missing>");
 					} else if (current instanceof JSONObject) {
 						JSONObject object = (JSONObject)current;
-						log.debug("elasic hit path element: " + nodes[i]);
+						logger.debug("elasic hit path element: " + nodes[i]);
 						current = object.opt(nodes[i+1]);
 					} else if (current instanceof JSONArray) {
-						log.debug("elasic hit array path element: " + nodes[i]);
+						logger.debug("elasic hit array path element: " + nodes[i]);
 						if (((JSONArray) current).length() == 0) {
-							log.debug("elastic hit: " + nodes[i] + ": <array empty>");
+							logger.debug("elastic hit: " + nodes[i] + ": <array empty>");
 						} else
 							break;
 						i--;
 					} else {
-						log.debug("elastic hit: " + label + ": " + ((String)current));
+						logger.debug("elastic hit: " + label + ": " + ((String)current));
 					}
 				}
 			}
 
-			log.debug("current: " + current);
+			logger.debug("current: " + current);
 			if (current != null) {
 				if (startCriteria < 1) // a missing parameter in the requesting URL
 					// results in this getting set to 0.

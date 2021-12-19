@@ -8,13 +8,13 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 @SuppressWarnings("serial")
 
 public class ElasticAggregationTermStatus extends BodyTagSupport {
-	private static final Log log = LogFactory.getLog(ElasticAggregationTermStatus.class);
+	static Logger logger = LogManager.getLogger(ElasticSearch.class);
 	ElasticAggregation theAggregation = null;
 	ElasticAggregationTermIterator theIterator = null;
 	HttpServletRequest request = null;
@@ -27,15 +27,15 @@ public class ElasticAggregationTermStatus extends BodyTagSupport {
 			throw new JspTagException("Lucene Hit tag not nesting in Search instance");
 		}
 		try {
-			log.info("request " + request);
+			logger.info("request " + request);
 			Enumeration<String> paramEnum = request.getParameterNames();
 			while (paramEnum.hasMoreElements()) {
 				String param = paramEnum.nextElement();
 				if (param.equals(theAggregation.theAggregation.getName())) {
-					log.info("\tparameter: " + param);
+					logger.info("\tparameter: " + param);
 					for (String value : request.getParameterValues(param)) {
 						if (value.equals(theIterator.bucket.getKeyAsString())) {
-							log.info("\tmatched: " + value);
+							logger.info("\tmatched: " + value);
 							pageContext.getOut().print("checked");
 							return SKIP_BODY;
 						}
